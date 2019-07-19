@@ -38,11 +38,11 @@ os.loadAPI("reactor/display")
 
 -- Setup reactor
 local function connect(side)
-  -- TODO: get reactor type name
-  if periphera.getType(side) == 'monitor' then
+  side = side or ''
+  if peripheral.isPresent(side) and peripheral.getType(side) == 'BigReactors-Reactor' then
     return peripheral.wrap(side)
   else
-    return peripheral.find(t)
+    return peripheral.find('BigReactors-Reactor')
   end
 end
 local reactor = connect(reactor_side)
@@ -52,8 +52,8 @@ if reactor == nil then
 end
 
 -- Setup PID Objects
-local power_pid = PID.new({p=pkp, i=pki, d=pkd, max_i=100})
-local batt_pid = PID.new({p=bkp, i=bki, d=bkd, max_i=100})
+local power_pid = pid.PID:new({p=pkp, i=pki, d=pkd, max_i=100})
+local batt_pid = pid.PID:new({p=bkp, i=bki, d=bkd, max_i=100})
 
 local last_energy = reactor.getEnergyStored()
 local function get_delta_energy(delta)
@@ -67,11 +67,11 @@ end
 while true do
   d_energy = get_delta_energy(update_time)
   
-  batt_pid.update((target_battery - last_energy) / 1000000)
-  power_pid.update(100 - batt_pid.get())
+  batt_pid:update((target_battery - last_energy) / 1000000, update_time)
+  power_pid:update(100 - batt_pid.get(), update_time)
 
-  local rod_perc = math.max(math.min(math.floor(50.5 + power_pid.get()), 100), 0)
-  setAllControlRodLevels(100 + rod_perc)
+  local rod_perc = math.max(math.min(math.floor(50.5 + power_pid:get()), 100), 0)
+  reactor.setAllControlRodLevels(100 + rod_perc)
 
   sleep(update_time)
 end

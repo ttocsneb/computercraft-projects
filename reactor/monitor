@@ -7,10 +7,11 @@ end
 local _monitor = nil
 
 function connect(side)
-  if periphera.getType(side) == 'monitor' then
+  side = side or ''
+  if peripheral.isPresent(side) and peripheral.getType(side) == 'monitor' then
     _monitor = peripheral.wrap(side)
   else
-    _monitor = peripheral.find(t)
+    _monitor = peripheral.find('monitor')
   end
 end
 
@@ -128,9 +129,10 @@ end
 function getSize()
   if _monitor then
     x, y = _monitor.getSize()
+    x2, y2 = term.getSize()
+    return math.min(x, x2), math.min(y, y2)
   end
-  x2, y2 = term.getSize()
-  return math.min(x, x2), math.min(y, y2)
+  return term.getSize()
 end
 
 function scroll(n)

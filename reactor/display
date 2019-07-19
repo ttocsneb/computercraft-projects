@@ -79,7 +79,7 @@ function update(reactor, delta_energy)
   local storage = reactor.getEnergyStored()
   local produce = reactor.getEnergyProducedLastTick()
   local used = produce - delta_energy / 20
-  local control_rod = reactor.getControlRodLevel(1)
+  local control_rod = reactor.getControlRodLevel(0)
   local core_temp = reactor.getFuelTemperature()
   local case_temp = reactor.getCasingTemperature()
   local fuel = reactor.getFuelAmount()
