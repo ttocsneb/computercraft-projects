@@ -6,7 +6,7 @@ end
 
 local _monitor = nil
 
-local function connect(side)
+function connect(side)
   if periphera.getType(side) == 'monitor' then
     _monitor = peripheral.wrap(side)
   else
@@ -41,6 +41,8 @@ end
 -- the other is color, the color screen will still display color, while
 -- the black and white will be converted to black and white
 function blit(text, text_colors, background_colors)
+  text_colors = text_colors or string.rep('0', text.len())
+  background_colors = background_colors or string.rep('f', text.len())
 
   -- Convert a color text to black and white text
   local to_black_and_white = function(color)
