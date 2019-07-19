@@ -6,8 +6,13 @@
 --Fuel: xb              waste: xb
 --■■■■■■■■■■■■■■■■■■■■■■■ ■■■■■■■
 
-os.loadAPI("monitor")
-local width, local height = monitor.getSize()
+
+local function tern(cond, T, F)
+  if cond then return T else return F end
+end
+
+os.loadAPI("reactor/monitor")
+local width, height = monitor.getSize()
 
 if height < 6 then
   monitor.write("Warning: Monitor not tall enough for this program")
@@ -62,6 +67,13 @@ local function color_text(text, color)
   string.rep(color, tostring(text).len())
 end
 
+local function color_notate(text, color)
+  if text ~= '' then
+    return color or '0'
+  end
+  return ''
+end
+
 function update(reactor, delta_energy)
   local active = reactor.getActive()
   local storage = reactor.getEnergyStored()
@@ -78,12 +90,12 @@ function update(reactor, delta_energy)
   local color_line = get_line('0')
   
   -- Active
-  put_left("Active " .. "yes" if active else "no", line)
-  put_left("0000000" .. "555" if active else "11", color_line)
+  put_left("Active " .. tern(active, "yes", "no"), line)
+  put_left("0000000" .. tern(active, "555", "11"), color_line)
   -- Power
   local num, no = notate(storage)
   put_right("Power " .. num .. no .. "RF", line)
-  put_right(color_text(num, '3') .. '0' if no ~= '' else '' .. '00', color_line)
+  put_right(color_text(num, '3') .. color_notate(no) .. '00', color_line)
 
   monitor.setCursorPos(1, 1)
   monitor.blit(line, color_line)
@@ -97,7 +109,7 @@ function update(reactor, delta_energy)
   -- Production
   num, no = notate(produce)
   put_right("Prod " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num) .. '0' if no ~= '' else '' .. '000', color_line)
+  put_right(color_text(num) .. color_notate(no) .. '000', color_line)
   
   monitor.setCursorPos(1, 2)
   monitor.blit(line, color_line)
@@ -107,7 +119,7 @@ function update(reactor, delta_energy)
   -- Usage
   num, no = notate(used)
   put_right("Use " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num) .. '0' if no ~= '' else '' .. '000', color_line)
+  put_right(color_text(num) .. color_notate(no) .. '000', color_line)
   
   monitor.setCursorPos(1, 3)
   monitor.blit(line, color_line)
@@ -122,7 +134,7 @@ function update(reactor, delta_energy)
   -- Case Temp
   num, no = notate(case_temp)
   put_right("Frame " .. num .. no .. 'C', line)
-  put_right(color_text(num) .. '0' if no ~= '' or '' .. '0', color_line)
+  put_right(color_text(num) .. color_notate(no) .. '0', color_line)
   
   monitor.setCursorPos(1, 4)
   monitor.blit(line, color_line)
@@ -137,7 +149,7 @@ function update(reactor, delta_energy)
   -- Waste
   num, no = notate(fuel)
   put_right("Waste " .. num .. no .. 'B', line)
-  put_right(color_text(num) .. '0' if no ~= '' or '' .. '0', color_line)
+  put_right(color_text(num) .. color_notate(no) .. '0', color_line)
   
   monitor.setCursorPos(1, 5)
   monitor.blit(line, color_line)
@@ -156,6 +168,5 @@ function update(reactor, delta_energy)
   
   monitor.setCursorPos(1, 6)
   monitor.blit(line, color_line, back_color_line)
-  
   
 end

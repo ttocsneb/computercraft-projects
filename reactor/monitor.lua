@@ -1,5 +1,9 @@
 -- print to console and screen
 
+local function tern(cond, T, F)
+  if cond then return T else return F end
+end
+
 local _monitor = nil
 
 local function connect(side)
@@ -80,7 +84,7 @@ function show(text, color, back_color)
     return color ~= colors.white and color ~= colors.black
   end
   local colored = (color ~= nil and is_colored(color)) or (back_color ~= nil and is_colored(back_color))
-  local color_call = call_color if colored else call
+  local color_call = tern(call_color, colored, call)
   
   if color then
     color_call("setTextColor", color)

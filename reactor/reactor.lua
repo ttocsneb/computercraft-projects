@@ -26,13 +26,15 @@ bkd = 0
 -- End Config
 
 
-os.loadAPI("pid")
-os.loadAPI("monitor")
+os.loadAPI("reactor/pid.lua")
+os.loadAPI("reactor/monitor.lua")
 
 -- Setup monitor
 monitor.connect(monitor_side)
 monitor.clear()
 monitor.setCursorPos(1, 1)
+
+os.loadAPI("reactor/display.lua")
 
 -- Setup reactor
 local function connect(side)
