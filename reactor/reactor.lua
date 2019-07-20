@@ -65,13 +65,15 @@ end
 
 
 while true do
-  d_energy = get_delta_energy(update_time)
+  local d_energy = get_delta_energy(update_time)
   
   batt_pid:update((target_battery - last_energy) / 1000000, update_time)
-  power_pid:update(100 - batt_pid.get(), update_time)
+  power_pid:update(100 - batt_pid:get(), update_time)
 
   local rod_perc = math.max(math.min(math.floor(50.5 + power_pid:get()), 100), 0)
   reactor.setAllControlRodLevels(100 + rod_perc)
+
+  display.update(reactor, d_energy)
 
   sleep(update_time)
 end

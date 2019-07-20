@@ -90,6 +90,7 @@ function update(reactor, delta_energy)
   local color_line = get_line('0')
   
   -- Active
+  print(line)
   put_left("Active " .. tern(active, "yes", "no"), line)
   put_left("0000000" .. tern(active, "555", "11"), color_line)
   -- Power
