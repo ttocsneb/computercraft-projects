@@ -15,6 +15,10 @@ function connect(side)
   end
 end
 
+function connected()
+  return _monitor ~= nil
+end
+
 -- Call a function to both the monitor and terminal
 local function call(method, ...) 
   if _monitor then

@@ -34,6 +34,14 @@ monitor.connect(monitor_side)
 monitor.clear()
 monitor.setCursorPos(1, 1)
 
+if monitor.connected() then
+  monitor.write("Monitor Connected")
+else
+  monitor.write("No Monitor Found")
+end
+
+sleep(2)
+
 os.loadAPI("reactor/display")
 
 -- Setup reactor
