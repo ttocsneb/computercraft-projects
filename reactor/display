@@ -22,15 +22,17 @@ if height < 6 then
 end
 
 local function put_left(text, current_text)
-  return text .. string.sub(current_text, text.len() + 1)
+
+  return text .. string.sub(current_text, string.len(text) + 1)
 end
 
 local function put_right(text, current_text)
-  return string.sub(current_text, 1, -(text.len() + 1)) .. text
+  return string.sub(current_text, 1, -(string.len(text) + 1)) .. text
 end
 
 local function get_line(c)
   c = c or ' '
+  prin
   return string.rep(c, width)
 end
 
@@ -66,7 +68,7 @@ local function notate(number, base)
 end
 
 local function color_text(text, color)
-  string.rep(color, tostring(text).len())
+  string.rep(color, string.len(tostring(text)))
 end
 
 local function color_notate(text, color)
@@ -92,7 +94,6 @@ function update(reactor, delta_energy)
   local color_line = get_line('0')
   
   -- Active
-  print(line)
   put_left("Active " .. tern(active, "yes", "no"), line)
   put_left("0000000" .. tern(active, "555", "11"), color_line)
   -- Power
