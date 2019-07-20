@@ -4,7 +4,7 @@
 --                    Used: XRF/t
 --Core Temp: xC    Frame Temp: xC
 --Fuel: xb              waste: xb
---■■■■■■■■■■■■■■■■■■■■■■■ ■■■■■■■
+--##################### #########
 
 
 local function tern(cond, T, F)
@@ -13,6 +13,8 @@ end
 
 os.loadAPI("reactor/monitor")
 local width, height = monitor.getSize()
+
+print('size: ' .. width .. ', ' .. height)
 
 if height < 6 then
   monitor.write("Warning: Monitor not tall enough for this program")
