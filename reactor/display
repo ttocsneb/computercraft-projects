@@ -32,7 +32,6 @@ end
 
 local function get_line(c)
   c = c or ' '
-  prin
   return string.rep(c, width)
 end
 
@@ -58,6 +57,7 @@ local function round(num, place)
 end
 
 local function notate(number, base)
+  base = base or 0
   if number < 1000 then
     return round(number), get_notation(base)
   elseif number < 1000000 then
@@ -68,7 +68,7 @@ local function notate(number, base)
 end
 
 local function color_text(text, color)
-  string.rep(color, string.len(tostring(text)))
+  return string.rep(color, string.len(tostring(text)))
 end
 
 local function color_notate(text, color)

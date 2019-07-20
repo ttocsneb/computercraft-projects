@@ -42,8 +42,8 @@ end
 -- the other is color, the color screen will still display color, while
 -- the black and white will be converted to black and white
 function blit(text, text_colors, background_colors)
-  text_colors = text_colors or string.rep('0', text.len())
-  background_colors = background_colors or string.rep('f', text.len())
+  text_colors = text_colors or string.rep('0', string.len(text))
+  background_colors = background_colors or string.rep('f', string.len(text))
 
   -- Convert a color text to black and white text
   local to_black_and_white = function(color)
