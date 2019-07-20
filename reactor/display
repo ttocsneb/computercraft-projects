@@ -22,7 +22,6 @@ if height < 6 then
 end
 
 local function put_left(text, current_text)
-
   return text .. string.sub(current_text, string.len(text) + 1)
 end
 
@@ -95,7 +94,7 @@ function update(reactor, delta_energy)
   
   -- Active
   put_left("Active " .. tern(active, "yes", "no"), line)
-  put_left("0000000" .. tern(active, "555", "11"), color_line)
+  put_left("0000000" .. tern(active, "555", "ee"), color_line)
   -- Power
   local num, no = notate(storage)
   put_right("Power " .. num .. no .. "RF", line)
@@ -108,12 +107,12 @@ function update(reactor, delta_energy)
   color_line = get_line('0')
   -- Control Rod
   put_left("Rod " .. control_rod .. '%', line)
-  put_left("0000" .. color_text(control_rod), color_line)
+  put_left("0000" .. color_text(control_rod, '4'), color_line)
   
   -- Production
   num, no = notate(produce)
   put_right("Prod " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num) .. color_notate(no) .. '000', color_line)
+  put_right(color_text(num, 'd') .. color_notate(no) .. '000', color_line)
   
   monitor.setCursorPos(1, 2)
   monitor.blit(line, color_line)
@@ -123,7 +122,7 @@ function update(reactor, delta_energy)
   -- Usage
   num, no = notate(used)
   put_right("Use " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num) .. color_notate(no) .. '000', color_line)
+  put_right(color_text(num, '1') .. color_notate(no) .. '000', color_line)
   
   monitor.setCursorPos(1, 3)
   monitor.blit(line, color_line)
@@ -133,12 +132,12 @@ function update(reactor, delta_energy)
   -- Core Temp
   num, no = notate(core_temp)
   put_left("Core " .. num .. no .. 'C', line)
-  put_left("00000" .. color_text(num), color_line)
+  put_left("00000" .. color_text(num, '4'), color_line)
   
   -- Case Temp
   num, no = notate(case_temp)
   put_right("Frame " .. num .. no .. 'C', line)
-  put_right(color_text(num) .. color_notate(no) .. '0', color_line)
+  put_right(color_text(num, '4') .. color_notate(no) .. '0', color_line)
   
   monitor.setCursorPos(1, 4)
   monitor.blit(line, color_line)
@@ -148,12 +147,12 @@ function update(reactor, delta_energy)
   -- Fuel
   num, no = notate(fuel, -1)
   put_left("Fuel " .. num .. no .. 'B', line)
-  put_left("00000" .. color_text(num), color_line)
+  put_left("00000" .. color_text(num, '5'), color_line)
   
   -- Waste
   num, no = notate(fuel)
   put_right("Waste " .. num .. no .. 'B', line)
-  put_right(color_text(num) .. color_notate(no) .. '0', color_line)
+  put_right(color_text(num, 'a') .. color_notate(no) .. '0', color_line)
   
   monitor.setCursorPos(1, 5)
   monitor.blit(line, color_line)
