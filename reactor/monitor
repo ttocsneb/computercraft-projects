@@ -44,11 +44,10 @@ end
 
 local function man_blit(device, text, text_colors, background_colors)
   local function to_color(c, default)
-    if c == '' then
+    if c == '' or c == nil then
       c = default or '0'
     end
-    c = tonumber(c, 16)
-    return math.pow(2, c)
+    return math.pow(2, tonumber(c, 16))
   end
   
   for i=1, #text do
