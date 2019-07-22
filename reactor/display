@@ -93,85 +93,13 @@ function update(reactor, delta_energy)
   local color_line = get_line('0')
   
   monitor.clear()
+  monitor.setCursorPos(1,1)
   
-  -- Active
-  put_left("Active " .. tern(active, "yes", "no"), line)
-  put_left("0000000" .. tern(active, "555", "ee"), color_line)
-  -- Power
-  local num, no = notate(storage)
-  put_right("Power " .. num .. no .. "RF", line)
-  put_right(color_text(num, '3') .. color_notate(no) .. '00', color_line)
-
-  monitor.setCursorPos(1, 1)
-  monitor.blit(line, color_line)
-  
-  line = get_line()
-  color_line = get_line('0')
-  -- Control Rod
-  put_left("Rod " .. control_rod .. '%', line)
-  put_left("0000" .. color_text(control_rod, '4'), color_line)
-  
-  -- Production
-  num, no = notate(produce)
-  put_right("Prod " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num, 'd') .. color_notate(no) .. '000', color_line)
-  
-  monitor.setCursorPos(1, 2)
-  monitor.blit(line, color_line)
-  
-  line = get_line()
-  color_line = get_line('0')
-  -- Usage
-  num, no = notate(used)
-  put_right("Use " .. num .. no .. 'RF/t', line)
-  put_right(color_text(num, '1') .. color_notate(no) .. '000', color_line)
-  
-  monitor.setCursorPos(1, 3)
-  monitor.blit(line, color_line)
-  
-  line = get_line()
-  color_line = get_line('o')
-  -- Core Temp
-  num, no = notate(core_temp)
-  put_left("Core " .. num .. no .. 'C', line)
-  put_left("00000" .. color_text(num, '4'), color_line)
-  
-  -- Case Temp
-  num, no = notate(case_temp)
-  put_right("Frame " .. num .. no .. 'C', line)
-  put_right(color_text(num, '4') .. color_notate(no) .. '0', color_line)
-  
-  monitor.setCursorPos(1, 4)
-  monitor.blit(line, color_line)
-  
-  line = get_line()
-  color_line = get_line('0')
-  -- Fuel
-  num, no = notate(fuel, -1)
-  put_left("Fuel " .. num .. no .. 'B', line)
-  put_left("00000" .. color_text(num, '5'), color_line)
-  
-  -- Waste
-  num, no = notate(fuel)
-  put_right("Waste " .. num .. no .. 'B', line)
-  put_right(color_text(num, 'a') .. color_notate(no) .. '0', color_line)
-  
-  monitor.setCursorPos(1, 5)
-  monitor.blit(line, color_line)
-  
-  -- Fuel - Wast bar
-  
-  line = get_line()
-  local back_color_line = get_line('7')
-  local color_line = get_line('a')
-  
-  fuel_width = fuel / max_fuel * width
-  waste_width = waste / max_fuel * width
-  
-  put_left(string.rep('5', fuel_width), back_color_line)
-  put_right(string.rep('#', waste_width), line)
-  
-  monitor.setCursorPos(1, 6)
-  monitor.blit(line, color_line, back_color_line)
+  monitor.print("active: " .. active)
+  monitor.print("rod: " .. control_rod .. '%')
+  monitor.print("fuel: " .. fuel)
+  monitor.print("storage: " .. storage)
+  monitor.print("produce: " .. produce)
+  monitor.print("used: " .. used)
   
 end
