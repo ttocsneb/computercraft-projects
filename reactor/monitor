@@ -41,6 +41,28 @@ function write(text)
   call("write", text)
 end
 
+
+local function man_blit(device, text, text_colors, background_colors)
+  local function to_color(c, default)
+    if c == '' then
+      c = default or '0'
+    end
+    c = tonumber(c, 16)
+    return math.pow(2, c)
+  end
+  
+  for i=1, #text do
+    local c = text:sub(i, i)
+    local tc = to_color(text_colors:sub(i, i), '0')
+    local bc = to_color(background_colors:sub(i, i), 'f')
+    device.setTextColor(tc)
+    device.setBackgroundColor(bc)
+    device.write(c)
+  end
+  
+end
+
+
 -- Blit to the monitor and terminal.  If one is black and white, then the
 -- colors will be converted.  Note that if one is black and white, and
 -- the other is color, the color screen will still display color, while
@@ -71,17 +93,17 @@ function blit(text, text_colors, background_colors)
   -- blit to the monitor
   if _monitor then
     if _monitor.isColor() then
-      _monitor.blit(text, text_colors, background_colors)
+      man_blit(_monitor, text, text_colors, background_colors)
     else
-      _monitor.blit(text, black_color, black_back)
+      man_blit(_monitor, text, black_color, black_back)
     end
   end
   
   -- blit to the terminal
   if term.isColor() then
-    term.blit(text, text_colors, background_colors)
+    man_blit(term, text, text_colors, background_colors)
   else
-    term.blit(text, black_color, black_back)
+    man_blit(term, text, black_color, black_back)
   end
 end
 

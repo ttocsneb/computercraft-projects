@@ -9,6 +9,7 @@ monitor_side = nil  -- The name/side fo the monitor, not necessary for operation
 
 update_time = 0.2   -- The time in seconds between each update (smaller number
 --is more accurate, but uses more processes)
+display_update_time = 1
 
 -- Advanced Config
 
@@ -24,6 +25,8 @@ bki = 0
 bkd = 0
 
 -- End Config
+
+local display_on_loop = math.ceil(display_update_time / update_time)
 
 
 os.loadAPI("reactor/pid")
@@ -64,24 +67,23 @@ local power_pid = pid.PID:new({p=pkp, i=pki, d=pkd, max_i=100})
 local batt_pid = pid.PID:new({p=bkp, i=bki, d=bkd, max_i=100})
 
 local last_energy = reactor.getEnergyStored()
-local function get_delta_energy(delta)
-  local energy = reactor.getEnergyStored()
-  local de = (energy - last_energy) / delta
-  last_energy = energy
-  return de
-end
-
-
+local loop_num = display_on_loop
 while true do
-  local d_energy = get_delta_energy(update_time)
+  loop_num = loop_num + 1
+
+  local energy = reactor.getEnergyStored()
   
-  batt_pid:update((target_battery - last_energy) / 1000000, update_time)
+  batt_pid:update((target_battery - energy) / 1000000, update_time)
   power_pid:update(100 - batt_pid:get(), update_time)
 
   local rod_perc = math.max(math.min(math.floor(50.5 + power_pid:get()), 100), 0)
   reactor.setAllControlRodLevels(100 + rod_perc)
 
-  display.update(reactor, d_energy)
-
+  if loop_num >= display_on_loop then
+    local delta_energy = (energy - last_energy) / update_time
+    display.update(reactor, delta_energy)
+    loop_num = 0
+  end
+  last_energy = energy
   sleep(update_time)
 end
